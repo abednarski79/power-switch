@@ -68,7 +68,112 @@ In this project 2 way communication between arduino and PC was implemented. Each
 
 - PC (server) to Arduino command list
 
-First Header  | Second Header
-------------- | -------------
-Content Cell  | Content Cell
-Content Cell  | Content Cell
+command id | description | parameters | example
+---------- | ----------- | ---------- | -------
+5	| turns off LED	| delay |	5,1000; - turn off LED after 1 seconds
+6	| turns red LED on	| delay |	6,2000; - turn red LED on after 2 seconds
+7	| turns green LED on |	delay |	7,2000; - turn green LED on after 2 seconds
+8	| starts red LED blinking	| delay	| 8,2000; - starts red LED blinking after 2 seconds
+9	| starts green LED blinking	| delay	| 9,3000; - starts green LED blinking after 3 seconds
+10	| resets all characters from LCD	| TODO	| TODO
+11	| prints characters on LCD	| TODO	| TODO
+12	| turns relay ON |	delay | 	12; - turns relay to ON mode, in this example delay is not set = immediate
+13	| turns relay OFF	| delay |	13,50000; - turns relay to OFF mode after 50 seconds
+
+Example of sending message from PC (linux) to Arduino:
+
+Arduino connected over USB is available as serial device, example for *dmesg* output:
+```
+[   15.124508] udev[180]: starting version 164
+[   16.318056] cdc_acm 1-1.4:1.0: ttyACM0: USB ACM device
+``` 
+In my case device name is /dev/ttyACM0
+
+To send message use following command:
+> echo 12,60000; > /dev/ttyACM0
+
+above command will turn relay OFF after 60 seconds.
+
+- Arduino to PC (server) command list
+
+command id | description | parameters | example
+---------- | ----------- | ---------- | -------
+4 | starting shut down process | none | 4,0; - arduino sensed that its power adaptor is switche off so sends messege to PC (server) to start shut down sequence as it will switch relay OFF in next 120 seconds (120 seconds is hardcoded)
+
+Example of listening on the message from Arduino on PC (linux):
+
+Assuming that Arduino registered as serial device */dev/ttyACM0* the python script to listen on messages:
+
+```
+ #!/usr/bin/python
+ 
+
+# usage: send_and_receive_arduino <DEVICE> <BAUDRATE> # <TEXT> # where <DEVICE> is typically some /dev/ttyfoobar
+ # and where <BAUDRATE> is the baudrate
+ ## and where <TEXT> is a text, e.g. "Hello"
+ 
+
+import sys
+ import serial
+ import time
+ import subprocess
+ port = sys.argv[1] baudrate = sys.argv[2] print "Initializeing serial port: " + port + " " + baudrate
+ ser = serial.Serial()
+ ser.port = port
+ ser.baudrate = baudrate
+ ser.open()
+ while 1:
+        output = ser.readline()
+        print output
+        if output.startswith("4,"):
+                powerOffCommand = "/root/scripts/mpd_v2/commands/powerOff/powerOffSingleRunWrapper.sh" 
+                print powerOffCommand
+                subprocess.call([powerOffCommand])
+                # relayOffCommand = "echo" 
+                # relayOffParameters = "\"12,120000;\" > " + port
+                # print relayOffCommand
+                # subprocess.call([relayOffCommand, relayOffParameters])
+```
+
+## Images
+
+Arduino - central unit - box closed - front:
+![arduino-box_closed-front](doc/image/arduino-box_closed-front.jpg)
+Arduino - central unit - box closed - back:
+![arduino-box_closed-back](doc/image/arduino-box_closed-back.jpg)
+Arduino - central unit - box open - front:
+![arduino-box_open-front](doc/image/arduino-box_open-front.jpg)
+Arduino - central unit - box open - back:
+![arduino-box_open-back](doc/image/arduino-box_open-back.jpg)
+Arduino - central unit - box open - main board:
+![arduino-box_open-mainboard](doc/image/arduino-box_open-mainboard.jpg)
+Arduino - central unit - box open - interfaces board:
+![arduino-box_open-interfaces_board](doc/image/arduino-box_open-interfaces_board.jpg)
+Arduino - relay unit - box closed:
+![arduino-box_closed-relay_unit](doc/image/arduino-box_closed-relay_unit.jpg)
+Arduino - relay unit - box open (close-up):
+![arduino-box_open-relay_unit](doc/image/arduino-box_open-relay_unit.jpg)
+Arduino - relay unit - box open (from distance - with connectors):
+![arduino-box_closed-relay_unit-from_distance](doc/image/arduino-box_closed-relay_unit-from_distance.jpg)
+Schematics:
+![schmatics](doc/image/schmatics.jpg)
+## Elements list:
+- Arduino1 - Arduino - processor ATmega; variant Arduino UNO R3
+- C1 - Electrolytic Capacitor - package 100 mil [THT, electrolytic]; capacitance 10µF; voltage 6.3V
+- J1 - Screw terminal - 3 pins - package THT; hole size 1.0mm,0.508mm; pins 3; pin spacing 0.137in (3.5mm)
+- K1 - Relay - package THT; contact rating 125VAC / 30VDC @ 1 AMP; voltage 5V; switching circuit SPDT; part # FRS1B-S
+- LED1 - RGB LED (com. cathode, rgb) - package 5 mm THT?; pin order rgb; polarity common cathode; rgb RGB
+- R3 - 220 Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 220Ω; pin spacing 400 mil
+- R6 - 220 Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 220Ω; pin spacing 400 mil
+- R7 - 220 Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 220Ω; pin spacing 400 mil
+- R8 - 20k Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 20kΩ; pin spacing 400 mil
+- R9 - 10k Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 10kΩ; pin spacing 400 mil
+## Libraries used in the project
+- [CmdMessenger](https://github.com/dreamcat4/CmdMessenger)
+- [Timer](https://github.com/JChristensen/Timer)
+- [LiquidCrystal](http://arduino.cc/en/Reference/LiquidCrystal)
+## Links
+ - [initial discussion about approach to the problem](http://arduino.cc/forum/index.php?topic=134390.0)
+ - [voltage divider](http://arduino.cc/forum/index.php?PHPSESSID=d748e197470782883febd919a95efbcf&topic=107860.msg809962#msg809962) 
+ - [configuration of serial port under linux for communication with Arduino](http://playground.arduino.cc/Interfacing/LinuxTTY)
+ - [disabling auto-reset in Arduino](http://playground.arduino.cc/Main/DisablingAutoResetOnSerialConnection)
