@@ -16,11 +16,13 @@ Turning on is simple - just switch on the power extension switch !
 - arduino will be responsible for showing current boot sequence status of the PC (turning on, turning off, switched off).
 
 ## How does it work ?
+
 ### Turning PC on:
 - switch on arduino's power adapter
 - arduino starts and by default sets relay in ON mode and PC boots up
 - arduino sets RGB LED to "red blink" mode
 - PC boots up and when fully started sends message to arduino to set RGB LED in "solid green" mode
+
 ### Turning PC off (this is tricky part):
 - switch off arduino's adapter using button on extension cord
 - arduino switches itself to USB power source using built into board auto-select functionality
@@ -36,7 +38,6 @@ Turning on is simple - just switch on the power extension switch !
 - arduino after another 5 seconds switch relay to "off" mode - at this point whole system (PC and arduino) is completely disconnected from mains
 
 ## Modules
-
 There are 3 elements which had to be implemented:
 
 - software
@@ -48,21 +49,29 @@ There are 3 elements which had to be implemented:
   - led to show current status of the power switch and PC
 
 ## Software implementation details
+
 ### PC listener
 This is code running on PC which is responsible for listening on the shut down message from arduino. This code is written in Python and is based on infinitive loop which listens on data from serial. Code was tested on Debian Squeezy.
+
 ### Linux init scripts
 This script is responsible for setting up, initiating and controlling arduino from PC at star up and shut down of the system. Code was tested on Debian Squeezy.
+
 ### Arduino code
 This code is responsible for controlling LED and relay.
+
 ## Hardware implementation details:
 Hardware is based on Arudino Uno: 
 ![arduino](doc/image/arduino.jpg)
+
 ### Power source monitor
 2 resistors connected between VCC/GND/A0 to intercept the switching off of power adaptor. Arduino has built in functionalit to switching between power adaptor and USB.
+
 ### Relay
 Relay module.
+
 ### LED
 RGB LED connected to the board over 3 few resistors.
+
 ## Communicatio between arduino and PC
 In this project 2 way communication between arduino and PC was implemented. Each message starts from command id - *integers number*, this number might be in most cases followed by *delay* parameter which means that command should be executed in *N* milliseconds after the command was sent, and in some special cases message can also contain some *additional load* (TODO for LCD). Each command must end with semicolon *;* character and after that *ENTER* character.
 
@@ -188,10 +197,12 @@ Schematics:
 - R7 - 220 Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 220Ω; pin spacing 400 mil
 - R8 - 20k Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 20kΩ; pin spacing 400 mil
 - R9 - 10k Ω Resistor - package THT; tolerance ±5%; bands 4; resistance 10kΩ; pin spacing 400 mil
+
 ## Libraries used in the project
 - [CmdMessenger](https://github.com/dreamcat4/CmdMessenger)
 - [Timer](https://github.com/JChristensen/Timer)
 - [LiquidCrystal](http://arduino.cc/en/Reference/LiquidCrystal)
+
 ## Links
  - [initial discussion about approach to the problem](http://arduino.cc/forum/index.php?topic=134390.0)
  - [voltage divider](http://arduino.cc/forum/index.php?PHPSESSID=d748e197470782883febd919a95efbcf&topic=107860.msg809962#msg809962) 
