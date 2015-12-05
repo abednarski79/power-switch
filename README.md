@@ -137,26 +137,46 @@ import sys
 
 ## Images
 
-- Arduino - central unit - box closed - front:
+Arduino - central unit - box closed - front:
+
 ![arduino-box_closed-front](doc/image/arduino-box_closed-front.jpg)
-- Arduino - central unit - box closed - back:
+
+Arduino - central unit - box closed - back:
+
 ![arduino-box_closed-back](doc/image/arduino-box_closed-back.jpg)
-- Arduino - central unit - box open - front:
+
+Arduino - central unit - box open - front:
+
 ![arduino-box_open-front](doc/image/arduino-box_open-front.jpg)
-- Arduino - central unit - box open - back:
+
+Arduino - central unit - box open - back:
+
 ![arduino-box_open-back](doc/image/arduino-box_open-back.jpg)
-- Arduino - central unit - box open - main board:
+
+Arduino - central unit - box open - main board:
+
 ![arduino-box_open-mainboard](doc/image/arduino-box_open-mainboard.jpg)
-- Arduino - central unit - box open - interfaces board:
+
+Arduino - central unit - box open - interfaces board:
+
 ![arduino-box_open-interfaces_board](doc/image/arduino-box_open-interfaces_board.jpg)
-- Arduino - relay unit - box closed:
+
+Arduino - relay unit - box closed:
+
 ![arduino-box_closed-relay_unit](doc/image/arduino-box_closed-relay_unit.jpg)
-- Arduino - relay unit - box open (close-up):
+
+Arduino - relay unit - box open (close-up):
+
 ![arduino-box_open-relay_unit](doc/image/arduino-box_open-relay_unit.jpg)
-- Arduino - relay unit - box open (from distance - with connectors):
+
+Arduino - relay unit - box open (from distance - with connectors):
+
 ![arduino-box_closed-relay_unit-from_distance](doc/image/arduino-box_closed-relay_unit-from_distance.jpg)
-- Schematics:
+
+Schematics:
+
 ![schmatics](doc/image/schmatics.jpg)
+
 ## Elements list:
 - Arduino1 - Arduino - processor ATmega; variant Arduino UNO R3
 - C1 - Electrolytic Capacitor - package 100 mil [THT, electrolytic]; capacitance 10µF; voltage 6.3V
